@@ -14,11 +14,17 @@ const Map = () => {
   useEffect(() => {
     const map = new mapboxgl.Map({
       container: mapContainer.current,
-      style: "mapbox://styles/mapbox/streets-v11",
+      style: "mapbox://styles/mapbox/outdoors-v11",
       center: [lng, lat],
       zoom: zoom,
     });
+    map.on("move", () => {
+      setLng(map.getCenter().lng.toFixed(4));
+      setLat(map.getCenter().lat.toFixed(4));
+      setZoom(map.getZoom().toFixed(2));
+    });
     return () => map.remove();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   return <div className="map-container" ref={mapContainer} />;
 };
