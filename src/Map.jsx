@@ -8,13 +8,13 @@ mapboxgl.accessToken = process.env.REACT_APP_ACCESS_TOKEN;
 
 const Map = () => {
   const mapContainer = useRef();
-  const [lng, setLng] = useState(-70.9);
-  const [lat, setLat] = useState(42.35);
-  const [zoom, setZoom] = useState(9);
+  const [lng, setLng] = useState(12.4792);
+  const [lat, setLat] = useState(41.8897);
+  const [zoom, setZoom] = useState(14);
   useEffect(() => {
     const map = new mapboxgl.Map({
       container: mapContainer.current,
-      style: "mapbox://styles/mapbox/outdoors-v11",
+      style: "mapbox://styles/mapbox/satellite-v9",
       center: [lng, lat],
       zoom: zoom,
     });
