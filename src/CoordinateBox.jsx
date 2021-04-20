@@ -1,5 +1,6 @@
 import React from "react";
 import styled from "styled-components";
+import { useMap } from "./map-context";
 
 const Box = styled.section`
   position: absolute;
@@ -22,16 +23,19 @@ const Divider = styled.div`
 `;
 
 const CoordinateBox = () => {
+  const {
+    state: { lng, lat, zoom },
+  } = useMap();
   return (
     <Box>
       <strong>Longitude:</strong>
-      <span>12.4792</span>
+      <span>{lng.toFixed(4)}</span>
       <Divider />
       <strong>Latitude:</strong>
-      <span>41.8897</span>
+      <span>{lat.toFixed(4)}</span>
       <Divider />
       <strong>Zoom:</strong>
-      <span>14</span>
+      <span>{zoom.toFixed(2)}</span>
     </Box>
   );
 };

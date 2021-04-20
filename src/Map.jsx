@@ -1,16 +1,18 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef } from "react";
 import mapboxgl from "mapbox-gl/dist/mapbox-gl-csp";
 // eslint-disable-next-line import/no-webpack-loader-syntax
 import MapboxWorker from "worker-loader!mapbox-gl/dist/mapbox-gl-csp-worker";
+import { useMap } from "./map-context";
 
 mapboxgl.workerClass = MapboxWorker;
 mapboxgl.accessToken = process.env.REACT_APP_ACCESS_TOKEN;
 
 const Map = () => {
   const mapContainer = useRef();
-  const [lng, setLng] = useState(12.4792);
-  const [lat, setLat] = useState(41.8897);
-  const [zoom, setZoom] = useState(14);
+  const {
+    dispatch,
+    state: { lng, lat, zoom },
+  } = useMap();
   useEffect(() => {
     const map = new mapboxgl.Map({
       container: mapContainer.current,
@@ -19,9 +21,10 @@ const Map = () => {
       zoom: zoom,
     });
     map.on("move", () => {
-      setLng(map.getCenter().lng.toFixed(4));
-      setLat(map.getCenter().lat.toFixed(4));
-      setZoom(map.getZoom().toFixed(2));
+      dispatch({
+        type: "move",
+        payload: { ...map.getCenter(), zoom: map.getZoom() },
+      });
     });
     return () => map.remove();
     // eslint-disable-next-line react-hooks/exhaustive-deps
