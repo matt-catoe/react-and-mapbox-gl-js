@@ -61,7 +61,7 @@ const getLocation = async (dispatch, coordinates) => {
           [place_type[0]]: text,
         };
       }, {});
-      dispatch({ type: "location received", place });
+      dispatch({ type: "location received", payload: place });
     }
   } catch (error) {
     dispatch({ type: "location error", error });

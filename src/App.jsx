@@ -1,12 +1,12 @@
 import React from "react";
-import CoordinateBox from "./CoordinateBox";
+import InfoBox from "./InfoBox";
 import Map from "./Map";
 import { MapProvider } from "./map-context";
 
 const App = () => {
   return (
     <MapProvider>
-      <CoordinateBox />
+      <InfoBox />
       <Map />
     </MapProvider>
   );
