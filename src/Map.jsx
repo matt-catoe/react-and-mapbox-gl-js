@@ -2,7 +2,7 @@ import React, { useEffect, useRef } from "react";
 import mapboxgl from "mapbox-gl/dist/mapbox-gl-csp";
 // eslint-disable-next-line import/no-webpack-loader-syntax
 import MapboxWorker from "worker-loader!mapbox-gl/dist/mapbox-gl-csp-worker";
-import { useMap } from "./map-context";
+import { useMap, getLocation } from "./map-context";
 
 mapboxgl.workerClass = MapboxWorker;
 mapboxgl.accessToken = process.env.REACT_APP_ACCESS_TOKEN;
@@ -20,11 +20,15 @@ const Map = () => {
       center: [lng, lat],
       zoom: zoom,
     });
+    getLocation(dispatch, { lng, lat });
     map.on("move", () => {
       dispatch({
         type: "move",
         payload: { ...map.getCenter(), zoom: map.getZoom() },
       });
+    });
+    map.on("moveend", () => {
+      getLocation(dispatch, map.getCenter());
     });
     return () => map.remove();
     // eslint-disable-next-line react-hooks/exhaustive-deps
