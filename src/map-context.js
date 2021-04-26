@@ -17,8 +17,10 @@ const mapReducer = (state, action) => {
   switch (type) {
     case "move":
       return { ...state, ...payload };
-    case "location received":
-      return { ...state, ...payload };
+    case "location received": {
+      const { place, region, country } = payload;
+      return { ...state, place, region, country };
+    }
     case "location not found":
       return { ...state, place: null, region: null, country: null };
     default:
