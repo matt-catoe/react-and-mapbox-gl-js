@@ -27,9 +27,12 @@ const Map = () => {
         payload: { ...map.getCenter(), zoom: map.getZoom() },
       });
     });
-    map.on("moveend", () => {
-      getLocation(dispatch, map.getCenter());
-    });
+    /**
+     * This handles reverse geocoding on moveend
+     */
+    // map.on("moveend", () => {
+    //   getLocation(dispatch, map.getCenter());
+    // });
     return () => map.remove();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);

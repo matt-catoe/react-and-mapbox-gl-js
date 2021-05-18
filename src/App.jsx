@@ -1,12 +1,12 @@
 import React from "react";
-import InfoBox from "./InfoBox";
+// import InfoBox from "./InfoBox";
 import Map from "./Map";
 import { MapProvider } from "./map-context";
 
 const App = () => {
   return (
     <MapProvider>
-      <InfoBox />
+      {/* <InfoBox /> */}
       <Map />
     </MapProvider>
   );

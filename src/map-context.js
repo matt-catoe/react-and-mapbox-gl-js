@@ -40,7 +40,7 @@ const MapProvider = ({ children }) => {
 const useMap = () => {
   const context = React.useContext(MapContext);
   if (context === undefined) {
-    throw new Error("useCount must be used within a MapProvider");
+    throw new Error("useMap must be used within a MapProvider");
   }
   return context;
 };
