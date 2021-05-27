@@ -28,6 +28,10 @@ const Map = () => {
         tileSize: 512,
         maxzoom: 14,
       });
+      map.addSource("10m-bathymetry-81bsvj", {
+        type: "vector",
+        url: "mapbox://mapbox.9tm8dx88",
+      });
       map.setTerrain({ source: "mapbox-dem" });
       map.addLayer({
         id: "sky",
@@ -38,6 +42,28 @@ const Map = () => {
           "sky-atmosphere-sun-intensity": 15,
         },
       });
+      map.addLayer(
+        {
+          id: "10m-bathymetry-81bsvj",
+          type: "fill",
+          source: "10m-bathymetry-81bsvj",
+          "source-layer": "10m-bathymetry-81bsvj",
+          layout: {},
+          paint: {
+            "fill-outline-color": "hsla(337, 82%, 62%, 0)",
+            "fill-color": [
+              "interpolate",
+              ["cubic-bezier", 0, 0.5, 1, 0.5],
+              ["get", "DEPTH"],
+              200,
+              "#78bced",
+              9000,
+              "#15659f",
+            ],
+          },
+        },
+        "land-structure-polygon"
+      );
       setTimeout(() => {
         map.easeTo({ pitch: 70 });
       }, 1000);
