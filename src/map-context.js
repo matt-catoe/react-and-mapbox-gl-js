@@ -9,11 +9,16 @@ const initialState = {
   zoom: 1,
   pitch: 0,
   bearing: 0,
+  mapRef: null,
 };
 
 const mapReducer = (state, action) => {
   const { type, payload } = action;
   switch (type) {
+    case "set map reference": {
+      const { mapRef } = payload;
+      return { ...state, mapRef };
+    }
     case "move":
       return { ...state, ...payload };
     case "location received": {

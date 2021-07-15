@@ -24,6 +24,8 @@ const Map = () => {
     // Get location data via reverse geocoding
     // getMapPosition(dispatch, { lng, lat });
     map.on("load", () => {
+      // Set map reference in context
+      dispatch({ type: "set map reference", payload: { mapRef: map } });
       // Add elevation source
       map.addSource("mapbox-dem", {
         type: "raster-dem",

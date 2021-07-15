@@ -1,13 +1,7 @@
 @import "./map.css";
-
-/**
- * colors
- * white: f5eccd
- * green: 52796f
- * black: 001524
- * light red: c17767
- * dark red: 4a051c
- */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
 body {
   margin: 0;
