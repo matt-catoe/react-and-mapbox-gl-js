@@ -12,19 +12,19 @@ const User = () => {
   } = useMap();
 
   useEffect(() => {
-    if (!initialized && mapRef && longitude && latitude) {
-      const data = {
-        type: "FeatureCollection",
-        features: [
-          {
-            type: "Feature",
-            geometry: {
-              type: "Point",
-              coordinates: [longitude, latitude],
-            },
+    const data = {
+      type: "FeatureCollection",
+      features: [
+        {
+          type: "Feature",
+          geometry: {
+            type: "Point",
+            coordinates: [longitude, latitude],
           },
-        ],
-      };
+        },
+      ],
+    };
+    if (!initialized && mapRef && longitude && latitude) {
       mapRef.addSource("user-location", { type: "geojson", data: data });
       mapRef.addLayer({
         id: "user-location-marker",
@@ -38,6 +38,11 @@ const User = () => {
         },
       });
       setInitialized(true);
+    }
+    if (initialized) {
+      const newData = { ...data };
+      newData.features[0].geometry.coordinates = [longitude, latitude];
+      mapRef.getSource("user-location").setData(newData);
     }
   }, [mapRef, longitude, latitude, initialized, setInitialized]);
   useEffect(() => {

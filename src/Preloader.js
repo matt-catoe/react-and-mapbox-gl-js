@@ -19,7 +19,7 @@ const Preloader = () => {
   useEffect(() => {
     const flyToLocation = locationReceived && mapRef;
     // Flip loading state if user location is found or status message received
-    if (flyToLocation || message) {
+    if ((flyToLocation || message) && isLoading) {
       // If user location received, fly to
       if (flyToLocation) {
         mapRef.flyTo({
@@ -32,7 +32,7 @@ const Preloader = () => {
         setIsLoading(false);
       }, 1500);
     }
-  }, [locationReceived, mapRef, longitude, latitude, message]);
+  }, [locationReceived, mapRef, longitude, latitude, message, isLoading]);
   return (
     <div
       className={`fixed bg-green-300 inset-8 shadow-2xl flex flex-col justify-center items-center transform ease-out duration-1000 ${
