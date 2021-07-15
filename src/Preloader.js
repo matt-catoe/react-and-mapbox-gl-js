@@ -35,8 +35,8 @@ const Preloader = () => {
   }, [locationReceived, mapRef, longitude, latitude, message]);
   return (
     <div
-      className={`fixed bg-green-300 rounded-lg inset-8 shadow-2xl flex flex-col justify-center items-center transition-opacity ease-out duration-1000 ${
-        !isLoading ? "opacity-0" : "opacity-100"
+      className={`fixed bg-green-300 inset-8 shadow-2xl flex flex-col justify-center items-center transform ease-out duration-1000 ${
+        !isLoading ? "scale-0 rounded-full" : "scale-100 rounded-lg"
       }`}
     >
       {!message ? (
