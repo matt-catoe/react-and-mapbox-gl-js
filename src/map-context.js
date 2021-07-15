@@ -6,12 +6,9 @@ const MapContext = React.createContext();
 const initialState = {
   lng: 9.240184722799995,
   lat: 45.997446529216944,
-  zoom: 11.273519201974203,
+  zoom: 1,
   pitch: 0,
   bearing: 0,
-  place: "Griante",
-  region: "Como",
-  country: "Italy",
 };
 
 const mapReducer = (state, action) => {
@@ -47,7 +44,7 @@ const useMap = () => {
   return context;
 };
 
-const getLocation = async (dispatch, coordinates) => {
+const getMapPosition = async (dispatch, coordinates) => {
   dispatch({ type: "fetch location", coordinates });
   try {
     const { lng, lat } = coordinates;
@@ -72,4 +69,4 @@ const getLocation = async (dispatch, coordinates) => {
   }
 };
 
-export { MapProvider, useMap, getLocation };
+export { MapProvider, useMap, getMapPosition };

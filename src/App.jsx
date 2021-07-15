@@ -2,13 +2,16 @@ import React from "react";
 // import InfoBox from "./InfoBox";
 import Map from "./Map";
 import { MapProvider } from "./map-context";
+import { UserProvider } from "./user-context";
 
 const App = () => {
   return (
-    <MapProvider>
-      {/* <InfoBox /> */}
-      <Map />
-    </MapProvider>
+    <UserProvider>
+      <MapProvider>
+        {/* <InfoBox /> */}
+        <Map />
+      </MapProvider>
+    </UserProvider>
   );
 };
 

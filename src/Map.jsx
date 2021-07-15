@@ -2,7 +2,7 @@ import React, { useEffect, useRef } from "react";
 import mapboxgl from "mapbox-gl/dist/mapbox-gl-csp";
 // eslint-disable-next-line import/no-webpack-loader-syntax
 import MapboxWorker from "worker-loader!mapbox-gl/dist/mapbox-gl-csp-worker";
-import { useMap, getLocation } from "./map-context";
+import { useMap /* getMapPosition */ } from "./map-context";
 
 mapboxgl.workerClass = MapboxWorker;
 mapboxgl.accessToken = process.env.REACT_APP_ACCESS_TOKEN;
@@ -14,25 +14,31 @@ const Map = () => {
     state: { lng, lat, zoom },
   } = useMap();
   useEffect(() => {
+    // Instantiate base map
     const map = new mapboxgl.Map({
       container: mapContainer.current,
       style: "mapbox://styles/mapbox/outdoors-v11",
       center: [lng, lat],
       zoom,
     });
-    getLocation(dispatch, { lng, lat });
+    // Get location data via reverse geocoding
+    // getMapPosition(dispatch, { lng, lat });
     map.on("load", () => {
+      // Add elevation source
       map.addSource("mapbox-dem", {
         type: "raster-dem",
         url: "mapbox://mapbox.mapbox-terrain-dem-v1",
         tileSize: 512,
         maxzoom: 14,
       });
+      // Add bathymetry source
       map.addSource("10m-bathymetry-81bsvj", {
         type: "vector",
         url: "mapbox://mapbox.9tm8dx88",
       });
+      // Set terrain property of the style
       map.setTerrain({ source: "mapbox-dem" });
+      // Add sky layer https://docs.mapbox.com/mapbox-gl-js/style-spec/layers/#sky
       map.addLayer({
         id: "sky",
         type: "sky",
@@ -42,6 +48,7 @@ const Map = () => {
           "sky-atmosphere-sun-intensity": 15,
         },
       });
+      // Add ocean bathymetry layer
       map.addLayer(
         {
           id: "10m-bathymetry-81bsvj",
@@ -64,10 +71,8 @@ const Map = () => {
         },
         "land-structure-polygon"
       );
-      setTimeout(() => {
-        map.easeTo({ pitch: 70 });
-      }, 1000);
     });
+    // Update state with current map positioning
     map.on("move", () => {
       dispatch({
         type: "move",
@@ -83,7 +88,7 @@ const Map = () => {
      * This handles reverse geocoding on moveend
      */
     // map.on("moveend", () => {
-    //   getLocation(dispatch, map.getCenter());
+    //   getMapPosition(dispatch, map.getCenter());
     // });
     return () => map.remove();
     // eslint-disable-next-line react-hooks/exhaustive-deps
