@@ -30,45 +30,31 @@ const Preloader = () => {
       }
       setTimeout(() => {
         setIsLoading(false);
-      }, 2000);
+      }, 1500);
     }
   }, [locationReceived, mapRef, longitude, latitude, message, isLoading]);
   return (
+    /**
+     * TODO: Move container to its own component and pass children
+     * Control open or hidden state and determine content conditionally
+     * States: Full, 3/4, completely hidden
+     * Add toggle if completely hidden
+     */
     <div
-      className={`flex justify-center h-screen w-screen ${
-        isLoading && "backdrop-filter backdrop-blur-none"
+      className={`fixed bg-green-300 rounded-lg inset-4 shadow-2xl flex flex-col justify-center items-center transform ease-out duration-1000 ${
+        !isLoading ? "top-3/4 -bottom-3/4" : "top-8"
       }`}
     >
-      <div
-        className={`fixed bg-green-300 border-4 border-gray-100 h-60 w-60 self-center shadow-2xl flex flex-col justify-center items-center transform ease-out duration-1000 ${
-          !isLoading ? "scale-0 rounded-full" : "scale-100 rounded-lg"
-        }`}
-      >
-        {!message ? (
-          <div
-            className={`flex-initial text-gray-100 ${
-              !locationReceived ? "animate-bounce" : "animate-spin"
-            }`}
-          >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              className="h-24 w-24"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={1}
-                d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-              />
-            </svg>
-          </div>
-        ) : (
+      {/* TODO: Decouple loading and container components */}
+      {!message ? (
+        <div
+          className={`flex-initial text-gray-100 ${
+            !locationReceived ? "animate-bounce" : "animate-spin"
+          }`}
+        >
           <svg
             xmlns="http://www.w3.org/2000/svg"
-            className="h-24 w-24 text-gray-100 "
+            className="h-24 w-24"
             fill="none"
             viewBox="0 0 24 24"
             stroke="currentColor"
@@ -77,24 +63,37 @@ const Preloader = () => {
               strokeLinecap="round"
               strokeLinejoin="round"
               strokeWidth={1}
-              d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l3.59 3.59m0 0A9.953 9.953 0 0112 5c4.478 0 8.268 2.943 9.543 7a10.025 10.025 0 01-4.132 5.411m0 0L21 21"
+              d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
             />
           </svg>
-        )}
-        {!!message ? (
-          <p className="font-sans text-xl text-gray-100 font-semibold">
-            {message}
-          </p>
-        ) : !locationReceived ? (
-          <p className="font-sans text-xl text-gray-100 font-bold">
-            Finding location
-          </p>
-        ) : (
-          <p className="font-sans text-xl text-gray-100 font-bold">
-            Found you!
-          </p>
-        )}
-      </div>
+        </div>
+      ) : (
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          className="h-24 w-24 text-gray-100 "
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+        >
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth={1}
+            d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l3.59 3.59m0 0A9.953 9.953 0 0112 5c4.478 0 8.268 2.943 9.543 7a10.025 10.025 0 01-4.132 5.411m0 0L21 21"
+          />
+        </svg>
+      )}
+      {!!message ? (
+        <p className="font-sans text-xl text-gray-100 font-semibold">
+          {message}
+        </p>
+      ) : !locationReceived ? (
+        <p className="font-sans text-xl text-gray-100 font-bold">
+          Finding location
+        </p>
+      ) : (
+        <p className="font-sans text-xl text-gray-100 font-bold">Found you!</p>
+      )}
     </div>
   );
 };
