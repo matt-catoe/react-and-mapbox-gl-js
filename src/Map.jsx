@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import mapboxgl from "mapbox-gl/dist/mapbox-gl-csp";
 // eslint-disable-next-line import/no-webpack-loader-syntax
 import MapboxWorker from "worker-loader!mapbox-gl/dist/mapbox-gl-csp-worker";
@@ -9,9 +9,11 @@ mapboxgl.accessToken = process.env.REACT_APP_ACCESS_TOKEN;
 
 const Map = () => {
   const mapContainer = useRef();
+  // TODO: Look for best practices for store map reference
+  const [mapRef, setMapRef] = useState(null);
   const {
     dispatch,
-    state: { lng, lat, zoom },
+    state: { lng, lat, zoom, newLocation },
   } = useMap();
   useEffect(() => {
     // Instantiate base map
@@ -21,6 +23,7 @@ const Map = () => {
       center: [lng, lat],
       zoom,
     });
+    setMapRef(map);
     // Get location data via reverse geocoding
     // getMapPosition(dispatch, { lng, lat });
     map.on("load", () => {
@@ -75,7 +78,7 @@ const Map = () => {
       );
     });
     // Update state with current map positioning
-    map.on("move", () => {
+    map.on("moveend", () => {
       dispatch({
         type: "move",
         payload: {
@@ -95,6 +98,11 @@ const Map = () => {
     return () => map.remove();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+  useEffect(() => {
+    if (!!newLocation) {
+      mapRef.flyTo(newLocation);
+    }
+  }, [mapRef, newLocation]);
   return <div className="map-container" ref={mapContainer} />;
 };
 

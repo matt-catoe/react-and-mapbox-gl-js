@@ -10,6 +10,7 @@ const initialState = {
   pitch: 0,
   bearing: 0,
   mapRef: null,
+  newLocation: null,
 };
 
 const mapReducer = (state, action) => {
@@ -20,13 +21,17 @@ const mapReducer = (state, action) => {
       return { ...state, mapRef };
     }
     case "move":
-      return { ...state, ...payload };
+      return { ...state, ...payload, newLocation: null };
     case "location received": {
       const { place, region, country } = payload;
       return { ...state, place, region, country };
     }
     case "location not found":
       return { ...state, place: null, region: null, country: null };
+    case "fly to location": {
+      const { location } = payload;
+      return { ...state, newLocation: location };
+    }
     default:
       return state;
   }
@@ -74,4 +79,8 @@ const getMapPosition = async (dispatch, coordinates) => {
   }
 };
 
-export { MapProvider, useMap, getMapPosition };
+const flyToLocation = async (dispatch, location) => {
+  dispatch({ type: "fly to location", payload: { location } });
+};
+
+export { MapProvider, useMap, getMapPosition, flyToLocation };

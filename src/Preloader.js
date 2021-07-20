@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
-import { useMap } from "./map-context";
+import Menu from "./components/Menu";
+import { flyToLocation, useMap } from "./map-context";
 import { getUserLocation, useUser } from "./user-context";
 
 const Preloader = () => {
@@ -8,21 +9,18 @@ const Preloader = () => {
     dispatch,
     state: { longitude, latitude, message },
   } = useUser();
-  const {
-    state: { mapRef },
-  } = useMap();
+  const { dispatch: dispatchMap } = useMap();
   // Determine if user location has been returned
   const locationReceived = !!Math.abs(longitude) && !!Math.abs(latitude);
   useEffect(() => {
     getUserLocation(dispatch);
   }, [dispatch]);
   useEffect(() => {
-    const flyToLocation = locationReceived && mapRef;
     // Flip loading state if user location is found or status message received
-    if ((flyToLocation || message) && isLoading) {
+    if ((locationReceived || message) && isLoading) {
       // If user location received, fly to
-      if (flyToLocation) {
-        mapRef.flyTo({
+      if (locationReceived) {
+        flyToLocation(dispatchMap, {
           center: [longitude, latitude],
           zoom: 11,
           curve: Math.pow(6, 0.25),
@@ -32,20 +30,9 @@ const Preloader = () => {
         setIsLoading(false);
       }, 1500);
     }
-  }, [locationReceived, mapRef, longitude, latitude, message, isLoading]);
+  }, [locationReceived, dispatchMap, longitude, latitude, message, isLoading]);
   return (
-    /**
-     * TODO: Move container to its own component and pass children
-     * Control open or hidden state and determine content conditionally
-     * States: Full, 3/4, completely hidden
-     * Add toggle if completely hidden
-     */
-    <div
-      className={`fixed bg-green-300 rounded-lg inset-4 shadow-2xl flex flex-col justify-center items-center transform ease-out duration-1000 ${
-        !isLoading ? "top-3/4 -bottom-3/4" : "top-8"
-      }`}
-    >
-      {/* TODO: Decouple loading and container components */}
+    <Menu closed={!isLoading}>
       {!message ? (
         <div
           className={`flex-initial text-gray-100 ${
@@ -94,7 +81,7 @@ const Preloader = () => {
       ) : (
         <p className="font-sans text-xl text-gray-100 font-bold">Found you!</p>
       )}
-    </div>
+    </Menu>
   );
 };
 
