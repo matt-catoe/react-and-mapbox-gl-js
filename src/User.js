@@ -10,7 +10,6 @@ const User = () => {
   const {
     state: { mapRef },
   } = useMap();
-
   useEffect(() => {
     const data = {
       type: "FeatureCollection",
@@ -39,10 +38,11 @@ const User = () => {
       });
       setInitialized(true);
     }
-    if (initialized) {
+    const userSource = mapRef ? mapRef.getSource("user-location") : null;
+    if (initialized && userSource) {
       const newData = { ...data };
       newData.features[0].geometry.coordinates = [longitude, latitude];
-      mapRef.getSource("user-location").setData(newData);
+      userSource.setData(newData);
     }
   }, [mapRef, longitude, latitude, initialized, setInitialized]);
   useEffect(() => {

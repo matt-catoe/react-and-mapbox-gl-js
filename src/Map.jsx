@@ -36,11 +36,6 @@ const Map = () => {
         tileSize: 512,
         maxzoom: 14,
       });
-      // Add bathymetry source
-      map.addSource("10m-bathymetry-81bsvj", {
-        type: "vector",
-        url: "mapbox://mapbox.9tm8dx88",
-      });
       // Set terrain property of the style
       map.setTerrain({ source: "mapbox-dem" });
       // Add sky layer https://docs.mapbox.com/mapbox-gl-js/style-spec/layers/#sky
@@ -53,29 +48,6 @@ const Map = () => {
           "sky-atmosphere-sun-intensity": 15,
         },
       });
-      // Add ocean bathymetry layer
-      map.addLayer(
-        {
-          id: "10m-bathymetry-81bsvj",
-          type: "fill",
-          source: "10m-bathymetry-81bsvj",
-          "source-layer": "10m-bathymetry-81bsvj",
-          layout: {},
-          paint: {
-            "fill-outline-color": "hsla(337, 82%, 62%, 0)",
-            "fill-color": [
-              "interpolate",
-              ["cubic-bezier", 0, 0.5, 1, 0.5],
-              ["get", "DEPTH"],
-              200,
-              "#78bced",
-              9000,
-              "#15659f",
-            ],
-          },
-        },
-        "land-structure-polygon"
-      );
     });
     // Update state with current map positioning
     map.on("moveend", () => {
@@ -90,6 +62,7 @@ const Map = () => {
       });
     });
     /**
+     * TODO: Move this to Preloader and get user location
      * This handles reverse geocoding on moveend
      */
     // map.on("moveend", () => {
@@ -100,6 +73,7 @@ const Map = () => {
   }, []);
   useEffect(() => {
     if (!!newLocation) {
+      // TODO: Perhaps switch to mapRef from context
       mapRef.flyTo(newLocation);
     }
   }, [mapRef, newLocation]);
